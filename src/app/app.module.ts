@@ -47,7 +47,15 @@ import { PostComponent } from './post/post.component';
     DialogModule,
     DynamicDialogModule,
   ],
-  declarations: [AppComponent, WelcomeComponent, TodoComponent, PostsComponent, GalleryComponent, AboutComponent, PostComponent],
+  declarations: [
+    AppComponent,
+    WelcomeComponent,
+    TodoComponent,
+    PostsComponent,
+    GalleryComponent,
+    AboutComponent,
+    PostComponent,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

@@ -33,7 +33,7 @@ export class PostsComponent implements OnInit {
   }
 
   loadPosts(start: number, limit: number): void {
-    const URL = `${this.getBaseUrl()}/posts?_start=${start}&_limit=${limit}`;
+    const URL = `/api/posts?_start=${start}&_limit=${limit}`;
     this.httpClient.get<Post[]>(URL).subscribe((posts) => {
       this.posts = posts;
     });
@@ -66,10 +66,8 @@ export class PostsComponent implements OnInit {
       return;
     }
 
-    const URL = `${this.getBaseUrl()}/posts`;
-    const headers = this.getHeaders();
-
-    this.httpClient.post<Post>(URL, { userId, title, body }, { headers }).subscribe((post) => {
+    const URL = `/api/posts`;
+    this.httpClient.post<Post>(URL, { userId, title, body }).subscribe((post) => {
       const lastPost = last(this.posts);
       const nextId = lastPost ? lastPost!.id + 1 : post.id;
 
@@ -93,7 +91,7 @@ export class PostsComponent implements OnInit {
   }
 
   updatePost(): void {
-    const { id } = this.editPost!;
+    const { id } = this.editPost || {};
     const title = (this.editTitle || '').trim();
     const body = (this.editBody || '').trim();
 
@@ -101,7 +99,7 @@ export class PostsComponent implements OnInit {
       return;
     }
 
-    const URL = `${this.getBaseUrl()}/posts/${id}`;
+    const URL = `/api/posts/${id}`;
     this.httpClient.patch<Post>(URL, { ...this.editPost, title, body }).subscribe((updatedPost) => {
       this.posts = this.posts.map((p) => (p.id === updatedPost.id ? updatedPost : p));
       this.hideEditModal();
@@ -109,18 +107,10 @@ export class PostsComponent implements OnInit {
   }
 
   deletePost(post: Post): void {
-    const URL = `${this.getBaseUrl()}/posts/${post.id}`;
+    const URL = `/api/posts/${post.id}`;
 
     this.httpClient.delete<void>(URL).subscribe(() => {
       this.posts = this.posts.map((p) => (p.id === post.id ? null : p)).filter(Boolean) as Post[];
     });
-  }
-
-  private getBaseUrl(): string {
-    return '//jsonplaceholder.typicode.com';
-  }
-
-  private getHeaders(): Record<string, string> {
-    return { 'Access-Control-Expose-Headers': 'X-Total-Count' };
   }
 }

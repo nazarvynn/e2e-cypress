@@ -39,8 +39,8 @@ export class PostComponent implements OnInit {
   }
 
   loadPost(id: string): void {
-    const URL_POST = `${this.getBaseUrl()}/posts/${id}`;
-    const URL_COMMENTS = `${this.getBaseUrl()}/posts/${id}/comments`;
+    const URL_POST = `/api/posts/${id}`;
+    const URL_COMMENTS = `/api/posts/${id}/comments`;
 
     combineLatest([this.httpClient.get<Post>(URL_POST), this.httpClient.get<Comment[]>(URL_COMMENTS)]).subscribe(
       ([post, comments]) => {
@@ -52,9 +52,5 @@ export class PostComponent implements OnInit {
 
   navigateBack(): void {
     this.router.navigate(['/posts']);
-  }
-
-  private getBaseUrl(): string {
-    return '//jsonplaceholder.typicode.com';
   }
 }
